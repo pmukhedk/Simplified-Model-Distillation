@@ -1,4 +1,4 @@
-# Simplified-Model-Distillation
+# Simplified Model Distillation
 A lightweight approach for simplifying large language model (LLM) distillation. Fine-tune and distill models like T5-small and smollm into  efficient models for summarization, sentiment analysis, and more. Ran on MacBook Pro with Apple M2 Pro chip and 32 GB Memory. 
 ## Environment Setup
 1. Create and activate a virtual environement
