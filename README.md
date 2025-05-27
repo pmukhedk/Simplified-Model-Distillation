@@ -29,5 +29,5 @@ python summary_base_model_test.py
 ```bash
 python summary_distilled_model_test.py
 ```
-8. You will notice similar results for the base model and distilled model. Please check the results folder to learn more about the improvements the distilled model has gained for summarization task.
+8. You will notice similar results for the base model and distilled model. Please check the results folder to learn more about the improvements the distilled model has attained for summarization task.
 ### 🎉 Have Fun! Extend, explore, and enjoy! 😄
