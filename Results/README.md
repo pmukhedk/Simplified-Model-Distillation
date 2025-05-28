@@ -1,5 +1,5 @@
 # Analyzing the Distillation Results
-For the distillation process, we leveraged two teacher models: **Gemma 3 12B (for sentiment analysis) and Qwen 3 4B (for summarization)**. The training data included the Yelp Review dataset (for sentiment analysis) and the CNN/DailyMail dataset (for summarization). The generated training files are available under the  **Workbench** folder for your review.
+For the distillation process, we leveraged two teacher models: **Gemma 3 12B (for sentiment analysis) and Qwen 3 4B (for summarization)**. The training data used are, Yelp Review dataset (for sentiment analysis) and the CNN/DailyMail dataset (for summarization). Allthe generated intermediate datasets are available under the  **Workbench** folder for your review.
 
 ## Result Files and Stucture
 1. The distillation results for **Sentiment Analysis and Summarization** skillse are captured in two different files.
