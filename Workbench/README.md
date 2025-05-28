@@ -75,8 +75,7 @@ model = AutoModelForSeq2SeqLM.from_pretrained(CHECKPOINT_DIR, trust_remote_code=
 
 6. Utilize the implementation details provided in the ```teacher_and_student_sentiment_analysis.py``` and ```teacher_summarization_distillation_dataprep.py``` scripts to generate and capture reasoning(rationale) and label for the fine-tuning dataset.
    
-7. Use the generated datasets to create training and validation splits for Sentiment Analysis and Summarization. For Sentiment Analysis, run ```generate_reasoning_dataset.py```; for Summarization, run ```generate_summarization_reasoning_dataset.py```. These scripts produce the raw datasets, which you should then split into train.csv and valid.csv files. Move these files to their respective dataset folders (yelp-review-dataset or cnn_dailymail).
-
+7. Use the generated datasets to create training and validation splits for Sentiment Analysis and Summarization. For Sentiment Analysis, run ```generate_reasoning_dataset.py```; for Summarization, run ```generate_summarization_reasoning_dataset.py```. These scripts produce the raw datasets, which you should then split into train.csv and valid.csv files. Move these files to their respective dataset folders (yelp-review-dataset or cnn_dailymail). For example,```python generate_summarization_reasoning_dataset.py ./cnn_dailymail/backup/train_with_generated_summary.csv```
   * **Recommendation**:
 
      - Allocate approximately 10–15% of the data for the validation set.
