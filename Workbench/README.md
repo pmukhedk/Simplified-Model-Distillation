@@ -70,3 +70,17 @@ tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DIR)
 model = AutoModelForSeq2SeqLM.from_pretrained(CHECKPOINT_DIR, trust_remote_code=True)
 ```
 5. Upload the distlled models to your huggingface repo for future reference.
+
+## Generating the Knowledge Distillation Dataset Using Teacher Models
+
+6. Utilize the implementation details provided in the ```teacher_and_student_sentiment_analysis.py``` and ```teacher_summarization_distillation_dataprep.py``` scripts to generate and capture reasoning(rationale) and label for the fine-tuning dataset.
+   
+7. Use the generated datasets to create training and validation splits for Sentiment Analysis and Summarization. For Sentiment Analysis, run ```generate_reasoning_dataset.py```; for Summarization, run ```generate_summarization_reasoning_dataset.py```. These scripts produce the raw datasets, which you should then split into train.csv and valid.csv files. Move these files to their respective dataset folders (yelp-review-dataset or cnn_dailymail).
+
+  * **Recommendation**:
+
+     - Allocate approximately 10–15% of the data for the validation set.
+     - Optionally, reserve the last 50 or 100 rows for use in post-distillation verification scripts.
+
+8. Execute the fine-tuning scripts explained in steps 3 and 4 above to create distilled Sentiment Analysis and Summarization SLMs.
+### 🎉 Have Fun! Extend, explore, and enjoy! 😄
