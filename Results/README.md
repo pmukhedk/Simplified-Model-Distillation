@@ -21,11 +21,13 @@ For the distillation process, we leveraged two teacher models: **Gemma 3 12B (fo
   
 ## Result Analysis
 
-4. We use **Relative Accuracy** for accessing the impact of knowledge distillation from the teacher model (gemma3 12b). You can calculate the accuracy by executing the *accuracy_calculator.py* script.
+4. We use **Relative Accuracy** (*using the Teacher model prediction as the baseline*) for accessing the impact of knowledge distillation from the teacher model (gemma3 12b). You can calculate the accuracy by executing the *accuracy_calculator.py* script.
 ```bash
 python accuracy_calculator.py
 ```
 >[!NOTE]
 >You will observe a substantial increase in relative accuracy from 19% to 65% after distillation. However, upon closer examination of the results file (```ResultSentimentAnalysis.csv```), it becomes clear that the 19% baseline accuracy is coincidental. With a more diverse and representative dataset, the pre-distillation accuracy would likely be significantly lower. Interestingly, for certain inputs, the distilled student model outperforms the teacher model, with accuracy approaching 75%, highlighting the potential of knowledge distillation.
+
+5. For summarization, we relied on manual qualitative assessment. By reviewing the results file (```news_and_summaries_pre_and_post_distillation.csv```), you will observe that the distilled model consistently produces more expressive and complete summaries compared to the baseline model, as demonstrated in the examples below.  
 
    
