@@ -6,7 +6,7 @@
    
 3. Let us start by fine-tuning the Sentiment Analysis base model.
   * Make sure you have the distillation-venv activated and all the dependencies are installed (created earlier)
-  * Download smollm 135M model (https://huggingface.co/HuggingFaceTB/SmolLM-135M) to ./smollm-135m folder using ```huggingface-cli download``` command.
+  * Download smollm 135M model (https://huggingface.co/HuggingFaceTB/SmolLM-135M) to ./smollm-135m folder using ```huggingface-cli download HuggingFaceTB/SmolLM-135M --local-dir ./smollm-135``` command.
   * Fine-tune the student model (with distilled knowledge from teacher) using the command below
 ```bash
     autotrain text-classification --train \
