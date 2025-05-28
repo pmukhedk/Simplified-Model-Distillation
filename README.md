@@ -20,7 +20,7 @@ source distillation-venv/bin/activate
 pip install -r requirements.txt
 ```
 ## Testing Sentiment Analysis Pre and Post Distillation
-4. Run the sentiment analysis test with base model (smollm 135M). Sometimes you may get an unauthorized error even for public model in huggingface, if you face this error login to huggingface using **huggingface-cli** login command.
+4. Run the sentiment analysis test with base model (smollm 135M). Sometimes you may get an unauthorized error even for public models in huggingface, login to huggingface using **huggingface-cli** login command to address this.
 ```bash
 python sentiment_base_model_test.py
 ```
@@ -39,5 +39,5 @@ python summary_base_model_test.py
 ```bash
 python summary_distilled_model_test.py
 ```
-9. You will notice similar results for the base model and distilled model. Please check the **Results** folder to learn more about the improvements the distilled model has attained for summarization task.
+9. You will notice similar results for the base model and distilled model. Please check the **Results** folder to learn more about the improvements the distilled model has attained for the summarization task.
 ### 🎉 Have Fun! Extend, explore, and enjoy! 😄
