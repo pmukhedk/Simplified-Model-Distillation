@@ -1,11 +1,11 @@
 # Workbench for the dataset prep and training
 
-1. This folder contains all the scripts used for preparing the dataset and knowledge distillation execution. The steps are not in order but gives you a general guidance. You may need to tweak and fix some environment dependent issues along the way.
+1. This folder contains all the scripts used for preparing the dataset with knowledge distillation from the Teacher models. The steps will give you a general guidance. You may need to tweak and fix some environment dependent issues along the way.
    
-2. The prepared dataset (```test.csv and train.csv```) are available under the respective dataset folders **cnn_dailymail & yelp-review-dataset**. All the baseline dataset along with the intermediate data files are available under the backup folders.
+2. The prepared datasets (```train.csv and valid.csv```) are available under the respective dataset folders **cnn_dailymail & yelp-review-dataset**. All the baseline dataset along with the intermediate data files are available under the backup folders.
    
 3. Let us start by fine-tuning the Sentiment Analysis base model.
-  * Make sure you have the distillation-venv active and all the dependencies are installed (created earlier)
+  * Make sure you have the distillation-venv activated and all the dependencies are installed (created earlier)
   * Download smollm 135M model (https://huggingface.co/HuggingFaceTB/SmolLM-135M) to ./smollm-135m folder using ```huggingface-cli download``` command.
   * Fine-tune the student model (with distilled knowledge from teacher) using the command below
 ```bash
