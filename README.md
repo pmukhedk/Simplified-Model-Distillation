@@ -1,4 +1,5 @@
 # Simplified Model Distillation
+## Key details about this POC is explained in this [blog](https://medium.com/@ahilanp/mini-models-new-tricks-distilling-13b-and-4b-models-into-135m-and-60m-students-e76f1a03d971)
 A lightweight approach for simplifying large language model (LLM) distillation. Fine-tune and distill samller models(SLM) like t5-small and smollm 135M into  efficient models for summarization, sentiment analysis, and more. Built on MacBook Pro with Apple M2 Pro chip and 32 GB Memory.
 
 ## Environment Setup
