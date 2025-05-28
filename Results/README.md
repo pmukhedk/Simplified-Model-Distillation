@@ -9,14 +9,14 @@ For the distillation process, we leveraged two teacher models: **Gemma 3 12B (fo
 2. The **ResultsSentimentAnalysis.csv** file contains the following columns
    1. Yelp Review
    2. Teacher Sentiment Analysis result (gemma3 12b output)
-   3. Student Sentiment Analysis result before distillation (smollm 135M)
+   3. Student Sentiment Analysis result before distillation (SmolLM 135M)
    4. Student Sentiment Analysis result after distillation (AhilanPonnusamy/distilled-smollm-sentiment-analyzer 135M model)
       
 3. The **news_and_summaries_pre_and_post_distillation.csv** file contains the following columns
    1. Id (unique identifier)
    2. News
    3. Generated Summary (included in the dataset)
-   4. Generated Summary before distillation (t5-small)
+   4. Generated Summary before distillation (T5 Small)
    5. Generated Summary after distillation (AhilanPonnusamy/distilled-t5small-summarizer)
   
 ## Result Analysis
