@@ -1,0 +1,5 @@
+model_name,skill_type,ROUGE-1,ROUGE-L,BERTScore-F1,CosineSimilarity
+eprasad/t5-small-llama70b-distill-summarization,summarization,0.28966603598692464,0.21243059075830037,0.8610154610872268,0.62964463
+eprasad/t5-small-qwen3-distill-summarization,summarization,0.27725414231921586,0.19252002010787927,0.8590610438585281,0.628604
+AhilanPonnusamy/distilled-t5small-summarizer,summarization,0.3101097055141372,0.24318006748351098,0.869640771150589,0.6207363
+t5-small,summarization,0.3044114539426831,0.22097947234736556,0.8634754008054734,0.5892642
