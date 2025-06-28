@@ -6,7 +6,24 @@ from scipy.spatial.distance import cosine
 from transformers import pipeline
 
 from sentence_transformers import SentenceTransformer
+'''
+TODO : clean this up later
+Requirements for this piece of code is 
 
+transformers
+pandas
+scipy
+evaluate
+torch
+scikit-learn
+sentence-transformers
+sentencepiece
+rouge_score
+nltk
+absl-py
+bert_score
+protobuf
+'''
 # Load once globally
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
