@@ -4,6 +4,7 @@ import csv
 from sklearn.metrics import accuracy_score, f1_score, recall_score, confusion_matrix
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
+from rouge_score import rouge_scorer
 from transformers import pipeline
 
 # Global sentence embedding model
@@ -39,18 +40,52 @@ def evaluate_model(skill_type, trained_model, model_name, inputs, references, ou
 def evaluate_summarization(predictions, references):
     rouge = evaluate.load("rouge")
     bertscore = evaluate.load("bertscore")
-    rouge_result = rouge.compute(predictions=predictions, references=references)
+
+    # Compute per-example scores to access recall
+    rouge_f1_scores = rouge.compute(
+        predictions=predictions,
+        references=references,
+        use_aggregator=False,
+        use_stemmer=True
+    )
+
+    rouge1_f1 = rouge_f1_scores['rouge1']
+    rougeL_f1 = rouge_f1_scores['rougeL']
+    # Aggregate recall
+    avg_rouge1_f1 = np.mean(rouge1_f1)
+    avg_rougeL_f1 = np.mean(rougeL_f1)
+
+    ####For the recalls use the rouge_scorer
+    scorer = rouge_scorer.RougeScorer(['rouge1',"rougeL"],use_stemmer=True)
+    rouge1_recalls=[]
+    rougeL_recalls=[]
+    for pred,ref in zip(predictions, references):
+        scores = scorer.score(ref,pred)
+        rouge1_recalls.append(scores['rouge1'].recall)
+        rougeL_recalls.append(scores['rougeL'].recall)
+
+    # Aggregate recall
+    avg_rouge1_recall = np.mean(rouge1_recalls)
+    avg_rougeL_recall = np.mean(rougeL_recalls)
+
+    # BERTScore
     bert_result = bertscore.compute(predictions=predictions, references=references, lang="en")
+    bert_recall = np.mean(bert_result['recall'])
+    bert_f1 = np.mean(bert_result['f1'])
+
+    cosine_sim = np.mean([
+        compute_cosine_similarity(p, r) for p, r in zip(predictions, references)
+    ])
 
     return {
-        'ROUGE-1': rouge_result['rouge1'],
-        'ROUGE-L': rouge_result['rougeL'],
-        'BERTScore-F1': np.mean(bert_result['f1']),
-        'CosineSimilarity': np.mean([
-            compute_cosine_similarity(p, r) for p, r in zip(predictions, references)
-        ])
+        'ROUGE-1-F1': avg_rouge1_f1,
+        'ROUGE-L-F1': avg_rougeL_f1,
+        'ROUGE-1-Recall': avg_rouge1_recall,
+        'ROUGE-L-Recall': avg_rougeL_recall,
+        'BERTScore-Recall': bert_recall,
+        'BERTScore-F1': bert_f1,
+        'CosineSimilarity': cosine_sim
     }
-
 
 def evaluate_sentiment(predictions, references):
     result = {
