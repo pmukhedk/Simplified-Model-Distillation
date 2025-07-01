@@ -34,8 +34,9 @@ def compute_sbc_scores(bertF1,cosine_values,predictions, references) -> Dict[str
 
     cosine_scores=cosine_values
     # Combine all into SBC
+    # Combine all into SBC
     sbc_scores = [
-        (1 / 3) * semantic + (1 / 3) * complete + (1 / 3) * cosine
+        (0.7 * semantic) + (0.2 * complete) + (0.1 * cosine)
         for semantic, complete, cosine in zip(semantic_scores, completeness_scores, cosine_values)
     ]
 
