@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, f1_score, recall_score, confusion_ma
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 from rouge_score import rouge_scorer
+from sbc_calculator import compute_sbc_scores
 from transformers import pipeline
 
 # Global sentence embedding model
@@ -72,10 +73,11 @@ def evaluate_summarization(predictions, references):
     bert_result = bertscore.compute(predictions=predictions, references=references, lang="en")
     bert_recall = np.mean(bert_result['recall'])
     bert_f1 = np.mean(bert_result['f1'])
+    cosine_values=[compute_cosine_similarity(p, r) for p, r in zip(predictions, references)]
 
-    cosine_sim = np.mean([
-        compute_cosine_similarity(p, r) for p, r in zip(predictions, references)
-    ])
+    cosine_sim = np.mean(cosine_values)
+    sbc_value= compute_sbc_scores(bert_result['f1'],cosine_values,predictions, references)
+
 
     return {
         'ROUGE-1-F1': avg_rouge1_f1,
@@ -84,8 +86,13 @@ def evaluate_summarization(predictions, references):
         'ROUGE-L-Recall': avg_rougeL_recall,
         'BERTScore-Recall': bert_recall,
         'BERTScore-F1': bert_f1,
-        'CosineSimilarity': cosine_sim
+        'CosineSimilarity': cosine_sim,
+        'SBC-Score': sbc_value.get("avg_sbc_score"),
+        'SBC-SemanticScore': sbc_value.get("avg_semantic_score"),
+        'SBC-CompletenessScore': sbc_value.get("avg_completeness_score"),
+        'SBC-CosineScore': sbc_value.get("avg_cosine_score"),
     }
+
 
 def evaluate_sentiment(predictions, references):
     result = {
