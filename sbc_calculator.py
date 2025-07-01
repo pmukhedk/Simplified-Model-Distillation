@@ -45,3 +45,4 @@ def compute_sbc_scores(bertF1,cosine_values,predictions, references) -> Dict[str
         "avg_completeness_score": float(np.mean(completeness_scores)),
         "avg_cosine_score": float(np.mean(cosine_scores)),
     }
+    
