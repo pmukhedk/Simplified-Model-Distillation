@@ -7,16 +7,16 @@ from sentence_transformers import SentenceTransformer
 from rouge_score import rouge_scorer
 #from sbc_calculator_ahilan import compute_sbc_scores
 from sbc_calculator import compute_sbc_scores
+from sentence_transformers import util
 from transformers import pipeline
 
 # Global sentence embedding model
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-
 def compute_cosine_similarity(a, b):
-    a_emb = embedding_model.encode(a, convert_to_tensor=True)
-    b_emb = embedding_model.encode(b, convert_to_tensor=True)
-    return 1 - cosine(a_emb.cpu().numpy(), b_emb.cpu().numpy())
+    emb1 = embedding_model.encode(a, convert_to_tensor=True)
+    emb2 = embedding_model.encode(b, convert_to_tensor=True)
+    return util.pytorch_cos_sim(emb1, emb2).item()
 
 def compute_sample_agreement(predictions, references):
     return sum(p.strip().lower() == r.strip().lower() for p, r in zip(predictions, references)) / len(predictions)
@@ -27,9 +27,15 @@ def get_model_size_mb(model):
     except:
         return "N/A"
 
-def evaluate_model(skill_type, trained_model, model_name, inputs, references,dataset_size, output_csv='model_metrics.csv'):
-    results = {'model_name': model_name, 'skill_type': skill_type, 'dataset_size': dataset_size}
-    predictions = [trained_model(x) for x in inputs]
+def evaluate_model(skill_type, trained_model, model_name, inputs, references,dataset_size, prompt_template, output_csv='model_metrics.csv'):
+    results = {
+                'model_name': model_name,
+                'skill_type': skill_type,
+                'dataset_size': dataset_size,
+                'prompt_template': prompt_template
+            }
+    predictions = [trained_model(prompt_template.format(text=x)) for x in inputs]
+
     model_size =  get_model_size_mb(trained_model)
     if skill_type.lower() == 'summarization':
         results.update(evaluate_summarization(predictions, references, model_size))
@@ -90,19 +96,17 @@ def evaluate_summarization(predictions, references,model_size):
 
 
     return {
-        'ROUGE-1-F1': avg_rouge1_f1,
-        'ROUGE-L-F1': avg_rougeL_f1,
-        'ROUGE-1-Recall': avg_rouge1_recall,
-        'ROUGE-L-Recall': avg_rougeL_recall,
-        'BERTScore-Recall': bert_recall,
-        'BERTScore-F1': bert_f1,
-        'CosineSimilarity': cosine_sim,
-        'SBC-Score': sbc_value.get("avg_sbc_score"),
-        'SBC-SemanticScore': sbc_value.get("avg_semantic_score"),
-        'SBC-CompletenessScore': sbc_value.get("avg_completeness_score"),
-        'SBC-CosineScore': sbc_value.get("avg_cosine_score"),
-        'Sample Agreements' : compute_sample_agreement(predictions, references),
-        'Model Size': model_size
+        'ROUGE-1-F1': round(avg_rouge1_f1,4),
+        'ROUGE-L-F1': round(avg_rougeL_f1,4),
+        'ROUGE-1-Recall': round(avg_rouge1_recall,4),
+        'ROUGE-L-Recall': round(avg_rougeL_recall,4),
+        'BERTScore-Recall': round(bert_recall,4),
+        'BERTScore-F1': round(bert_f1,4),
+        'CosineSimilarity': round(cosine_sim,4),
+        'SBC-Score': round(sbc_value.get("avg_sbc_score"),4),
+        'SBC-SemanticScore': round(sbc_value.get("avg_semantic_score"),4),
+        'SBC-CompletenessScore': round(sbc_value.get("avg_completeness_score"),4),
+        'SBC-CosineScore': round(sbc_value.get("avg_cosine_score"),4)
     }
 
 

@@ -16,6 +16,7 @@ def load_summarizer(model_name):
     if "t5" in model_name.lower():
         tokenizer = T5Tokenizer.from_pretrained(model_name)
         model = T5ForConditionalGeneration.from_pretrained(model_name)
+        prompt_template = "summarize: {text}"
 
         def summarizer(input_text):
             input_ids = tokenizer("summarize: " + input_text, return_tensors="pt").input_ids
@@ -25,6 +26,7 @@ def load_summarizer(model_name):
     elif "bart" in model_name.lower():
         tokenizer = BartTokenizer.from_pretrained(model_name)
         model = BartForConditionalGeneration.from_pretrained(model_name)
+        prompt_template = "{text}"  # BART doesn't require a prefix by default
 
         def summarizer(input_text):
             input_ids = tokenizer(input_text, return_tensors="pt").input_ids
@@ -36,6 +38,7 @@ def load_summarizer(model_name):
         model = GPT2LMHeadModel.from_pretrained(model_name)
         model.config.pad_token_id = tokenizer.eos_token_id
         model.eval()
+        prompt_template = "Please summarize the following:\n\n{text}\n\nSummary:"
 
         def summarizer(input_text):
             input_ids = tokenizer.encode(input_text, return_tensors="pt")
@@ -45,6 +48,7 @@ def load_summarizer(model_name):
     elif "led" in model_name.lower():
         tokenizer = LEDTokenizer.from_pretrained(model_name)
         model = LEDForConditionalGeneration.from_pretrained(model_name)
+        prompt_template = "{text}"  # LED models also usually don’t require a prefix
 
         def summarizer(input_text):
             inputs = tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True)
@@ -61,7 +65,7 @@ def load_summarizer(model_name):
     else:
         raise ValueError(f"Unsupported summarization model: {model_name}")
 
-    return summarizer
+    return summarizer,prompt_template
 
 
 def load_sentiment_pipeline(model_name="eprasad/sentiment-distillation-smollm"):
