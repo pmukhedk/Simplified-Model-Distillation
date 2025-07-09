@@ -28,13 +28,18 @@ def run_all_models(dataset_size, file_name):
     dataset = load_dataset("cnn_dailymail", "3.0.0", split=f"test[:{dataset_size}]")
     inputs = dataset["article"]
     references = dataset["highlights"]
-
+    '''
     model_names = [
         "t5-small",
         "eprasad/t5-small-llama70b-distill-summarization",
         "eprasad/t5-small-qwen3-distill-summarization",
         "AhilanPonnusamy/distilled-t5small-summarizer",
         "ooor/t5-small-distilled-summarization"
+    ]'''
+
+    model_names = [
+        "t5-small",
+        'eprasad/t5-base-summarization-distill-qwen3-32b'
     ]
 
     for model_name in model_names:
@@ -49,9 +54,10 @@ def run_all_models(dataset_size, file_name):
         )
 
 if __name__ == "__main__":
-    file_name = 'withrouge_recall_calculations_ahilan_weights.csv'
+    file_name = 'test.csv'
 
-    for dataset_size in range(100, 1000, 100):  # 100 to 900 inclusive
+    #for dataset_size in range(100, 1000, 100):  # 100 to 900 inclusive
+    for dataset_size in [100]:
         run_all_models(dataset_size, file_name)
 
 

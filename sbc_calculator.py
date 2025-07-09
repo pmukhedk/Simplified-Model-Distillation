@@ -1,6 +1,6 @@
 import nltk
 import numpy as np
-from typing import List, Dict
+from typing import Dict
 import re
 
 # Setup

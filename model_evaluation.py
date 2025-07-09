@@ -6,7 +6,8 @@ from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 from rouge_score import rouge_scorer
 #from sbc_calculator_ahilan import compute_sbc_scores
-from sbc_calculator import compute_sbc_scores
+#from sbc_calculator import compute_sbc_scores
+from sbc_calculator_lemm import compute_sbc_scores
 from sentence_transformers import util
 from transformers import pipeline
 

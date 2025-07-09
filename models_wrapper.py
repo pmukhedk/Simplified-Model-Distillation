@@ -3,7 +3,8 @@ from transformers import (
     BartTokenizer, BartForConditionalGeneration,
     GPT2Tokenizer, GPT2LMHeadModel,
     LEDTokenizer, LEDForConditionalGeneration,
-    pipeline, AutoTokenizer, AutoModelForSequenceClassification
+    pipeline, AutoTokenizer, AutoModelForSequenceClassification,
+    AutoModelForCausalLM
 )
 import torch
 from transformers import AutoConfig
@@ -43,6 +44,18 @@ def load_summarizer(model_name):
         def summarizer(input_text):
             input_ids = tokenizer.encode(input_text, return_tensors="pt")
             output_ids = model.generate(input_ids, max_new_tokens=100, pad_token_id=tokenizer.eos_token_id)
+            return tokenizer.decode(output_ids[0], skip_special_tokens=True)
+
+    elif "qwen" in model_name.lower():
+        tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
+        model.eval()
+        prompt_template = "Summarize this:\n\n{text}\n\nSummary:"
+
+        def summarizer(input_text):
+            prompt = prompt_template.format(text=input_text)
+            input_ids = tokenizer(prompt, return_tensors="pt").input_ids
+            output_ids = model.generate(input_ids, max_new_tokens=100)
             return tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
     elif "led" in model_name.lower():
