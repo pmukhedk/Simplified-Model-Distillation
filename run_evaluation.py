@@ -38,8 +38,7 @@ def run_all_models(dataset_size, file_name):
     ]'''
 
     model_names = [
-        "t5-small",
-        'eprasad/t5-base-summarization-distill-qwen3-32b'
+        "t5-small"
     ]
 
     for model_name in model_names:
