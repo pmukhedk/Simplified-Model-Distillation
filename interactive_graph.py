@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 import numpy as np
 
 # Load data
-df = pd.read_csv("withrouge_recall_calculations_ahilan_weights.csv")
+df = pd.read_csv("test_cuda.csv")
 df.columns = df.columns.str.strip()
 
 # Metrics & Models

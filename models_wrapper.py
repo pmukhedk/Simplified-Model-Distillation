@@ -110,7 +110,7 @@ def load_summarizer(model_name):
 
         model = AutoModelForCausalLM.from_pretrained(model_name, **qwen_kwargs).to(device).eval()
         print("✅ Qwen model loaded successfully.")
-        prompt_template = "Summarize this:\n\n{text}\n\nSummary:"
+        prompt_template = "Summarize this:\n\n{text}"
 
         def summarizer(input_text):
             #print("📝 Running summarizer on input...")

@@ -2,7 +2,6 @@ import evaluate
 import numpy as np
 import csv
 from sklearn.metrics import accuracy_score, f1_score, recall_score, confusion_matrix
-from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 from rouge_score import rouge_scorer
 #from sbc_calculator_ahilan import compute_sbc_scores
@@ -13,6 +12,19 @@ from transformers import pipeline
 
 # Global sentence embedding model
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+def write_per_sample_results(model_name, inputs, references, predictions):
+    safe_model_name = model_name.replace("/", "_").replace(":", "_")
+    filename = f"results_{safe_model_name}.csv"
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=['text', 'reference', 'prediction'])
+        writer.writeheader()
+        for inp, ref, pred in zip(inputs, references, predictions):
+            writer.writerow({
+                'text': inp.strip(),
+                'reference': ref.strip(),
+                'prediction': pred.strip()
+            })
 
 def compute_cosine_similarity(a, b):
     emb1 = embedding_model.encode(a, convert_to_tensor=True)
@@ -37,6 +49,8 @@ def evaluate_model(skill_type, trained_model, model_name, inputs, references,dat
             }
     predictions = [trained_model(prompt_template.format(text=x)) for x in inputs]
 
+    write_per_sample_results(model_name,inputs,references,predictions)
+
     model_size =  get_model_size_mb(trained_model)
     if skill_type.lower() == 'summarization':
         results.update(evaluate_summarization(predictions, references, model_size))
@@ -55,36 +69,27 @@ def evaluate_model(skill_type, trained_model, model_name, inputs, references,dat
 
 
 def evaluate_summarization(predictions, references,model_size):
-    rouge = evaluate.load("rouge")
     bertscore = evaluate.load("bertscore")
-
-
-    # Compute per-example scores to access recall
-    rouge_f1_scores = rouge.compute(
-        predictions=predictions,
-        references=references,
-        use_aggregator=False,
-        use_stemmer=True
-    )
-
-    rouge1_f1 = rouge_f1_scores['rouge1']
-    rougeL_f1 = rouge_f1_scores['rougeL']
-    # Aggregate recall
-    avg_rouge1_f1 = np.mean(rouge1_f1)
-    avg_rougeL_f1 = np.mean(rougeL_f1)
-
     ####For the recalls use the rouge_scorer
     scorer = rouge_scorer.RougeScorer(['rouge1',"rougeL"],use_stemmer=True)
     rouge1_recalls=[]
     rougeL_recalls=[]
+
+    rouge1_f1=[]
+    rougeL_f1=[]
+
     for pred,ref in zip(predictions, references):
         scores = scorer.score(ref,pred)
         rouge1_recalls.append(scores['rouge1'].recall)
         rougeL_recalls.append(scores['rougeL'].recall)
+        rouge1_f1.append(scores['rouge1'].fmeasure)
+        rougeL_f1.append(scores['rougeL'].fmeasure)
 
     # Aggregate recall
     avg_rouge1_recall = np.mean(rouge1_recalls)
     avg_rougeL_recall = np.mean(rougeL_recalls)
+    avg_rouge1_f1 = np.mean(rouge1_f1)
+    avg_rougeL_f1 = np.mean(rougeL_f1)
 
     # BERTScore
     bert_result = bertscore.compute(predictions=predictions, references=references, lang="en")

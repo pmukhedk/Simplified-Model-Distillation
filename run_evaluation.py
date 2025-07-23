@@ -53,7 +53,7 @@ def run_all_models(dataset_size, file_name):
         )
 
 if __name__ == "__main__":
-    file_name = 'test.csv'
+    file_name = 'test1.csv'
 
     #for dataset_size in range(100, 1000, 100):  # 100 to 900 inclusive
     for dataset_size in [100]:
