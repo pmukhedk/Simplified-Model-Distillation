@@ -140,3 +140,6 @@ scikit-learn
 sentence_transformers
 rouge_score
 spacy
+bert_score
+transformers[torch]
+SentencePiece
