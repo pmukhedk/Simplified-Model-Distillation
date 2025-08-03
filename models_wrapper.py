@@ -40,7 +40,7 @@ def load_summarizer(model_name):
         tokenizer = T5Tokenizer.from_pretrained(model_name)
         model = T5ForConditionalGeneration.from_pretrained(model_name).to(device).eval()
         print("✅ T5 model loaded successfully.")
-        prompt_template = "summarize: {text}"
+        prompt_template = "summarize: {text} , the summary response to have a word limit of 100 words"
 
         def summarizer(input_text):
             #print("📝 Running summarizer on input...")
@@ -63,7 +63,7 @@ def load_summarizer(model_name):
         tokenizer = BartTokenizer.from_pretrained(model_name)
         model = BartForConditionalGeneration.from_pretrained(model_name).to(device).eval()
         print("✅ BART model loaded successfully.")
-        prompt_template = "{text}"
+        prompt_template = "{text},the summary response to have a word limit of 100 words"
 
         def summarizer(input_text):
             #print("📝 Running summarizer on input...")
@@ -110,7 +110,7 @@ def load_summarizer(model_name):
 
         model = AutoModelForCausalLM.from_pretrained(model_name, **qwen_kwargs).eval()
         print("✅ Qwen model loaded successfully.")
-        prompt_template = "{text} ignore reasoning and provide only the final summary"
+        prompt_template = "{text} ignore reasoning , the summary response to have a word limit of 100 words"
 
         def summarizer(input_text):
             #print("📝 Running summarizer on input...")
