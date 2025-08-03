@@ -108,7 +108,7 @@ def load_summarizer(model_name):
             qwen_kwargs["device_map"] = None  # fallback
             print("⚠️ Flash attention disabled: Not using CUDA.")
 
-        model = AutoModelForCausalLM.from_pretrained(model_name, **qwen_kwargs).to(device).eval()
+        model = AutoModelForCausalLM.from_pretrained(model_name, **qwen_kwargs).eval()
         print("✅ Qwen model loaded successfully.")
         prompt_template = "Summarize this:\n\n{text}"
 
@@ -120,7 +120,9 @@ def load_summarizer(model_name):
                 padding=True,
                 truncation=True,
                 max_length=2048
-            ).to(device)
+            )
+            first_device = next(model.parameters()).device
+            inputs = {k: v.to(first_device) for k, v in inputs.items()}
             output_ids = model.generate(
                 input_ids=inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
